@@ -1,0 +1,35 @@
+apache2:
+  build: apache2
+  hostname: rancher-node1.esu.enonic.io
+  restart: always
+  ports:
+    - "80:80"
+  links:
+    - cms
+cms:
+  build: cms
+  restart: always
+  ports:
+    - "8080:8080"
+  links:
+   - postgres
+  environment:
+    CATALINA_OPTS: "-XX:MaxPermSize=256m -Xms1024m -Xmx1024m"
+    CMS_DB_PASSWORD: wpofwe234807jhvsdfSVEF352Douvo32f
+    CMS_DB_USER: cms
+  volumes_from:
+    - "cmsstorage"
+cmsstorage:
+  build: cmsstorage
+postgres:
+  build: postgres
+  restart: always
+  environment:
+    POSTGRES_PASSWORD: Ffee234liugFBWI352pihe2d
+    CMS_DB_PASSWORD: wpofwe234807jhvsdfSVEF352Douvo32f
+  volumes_from:
+    - postgresstorage
+postgresstorage:
+  image: postgres
+  volumes:
+    - /var/lib/postgresql/data

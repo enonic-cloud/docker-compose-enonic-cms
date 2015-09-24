@@ -1,0 +1,21 @@
+<VirtualHost *:80>
+
+	ServerName yourserver.com
+	ServerAlias www.yourserver.com
+
+	DocumentRoot /var/www/html/
+
+	ProxyRequests Off
+	ProxyPreserveHost On
+
+	
+	ProxyPass / ajp://cms:8009/
+	ProxyPassReverse / ajp://cms:8009/
+
+	RewriteEngine on
+	RewriteCond %{HTTP_HOST} !^yourserver\.com$
+	RewriteCond %{HTTP_HOST} !^$
+	RewriteRule ^/(.*) http://yourserver.com/$1 [L,R]
+
+</VirtualHost>
+
