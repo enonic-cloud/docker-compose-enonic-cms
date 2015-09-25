@@ -31,5 +31,6 @@ postgres:
     - postgresstorage
 postgresstorage:
   image: postgres
+  command: "Postgres storage container"
   volumes:
     - /var/lib/postgresql/data
