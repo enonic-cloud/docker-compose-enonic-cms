@@ -33,9 +33,16 @@ docker run -it --rm -v $CMS_BACKUP:/data --volumes-from enoniccms_cmsstorage_1 -
 ## Backup Enonic CMS installation
 The postgres container has a script to dump the complete installation storage to /data folder. Run a seperate docker container to extract the "Persistant" storage out of the containers. Combine this with the non persistant data, you have a complete backup of your installation.
 
-
+- Create the file `/usr/local/bin/cms-backup` and put this content in it: 
 ```
-# Docker command to run:
-#    export INSTANCE=pasientsikkerhetsprogrammet
-#    docker run --rm -v /srv/_backup/$INSTANCE:/data --volumes-from $INSTANCE"_cmsstorage_1" --link $INSTANCE"_postgres_1":postgres $INSTANCE"_postgres" em-export.sh
+#!/bin/bash
+
+INSTANCE=<your instance name>
+rm -rf /srv/_backup/$INSTANCE/*
+docker run --rm -v /srv/_backup/$INSTANCE:/data --volumes-from $INSTANCE"_cmsstorage_1" --link $INSTANCE"_postgres_1":postgres $INSTANCE"_postgres" em-export.sh
+```
+- Run `chmod +x /usr/local/bin/cms-backup` to make it executable
+- Add it to cron by running `crontab -e` and add this line to the end:
+```
+1 0 * * * /usr/local/bin/cms-backup  >> /var/log/cms-backup.log 2>&1
 ```
