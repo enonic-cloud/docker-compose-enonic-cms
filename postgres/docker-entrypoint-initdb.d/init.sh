@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Copying postgresql.conf to /var/lib/postgresql/data/postgresql.conf"
+cp /docker-entrypoint-initdb.d/postgresql.conf /var/lib/postgresql/data/postgresql.conf
+
 echo "Creating cms user"
 gosu postgres postgres --single -jE <<-EOSQL
 create user cms with password '$CMS_DB_PASSWORD';

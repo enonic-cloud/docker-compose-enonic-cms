@@ -1,6 +1,6 @@
 apache2:
   build: apache2
-  hostname: my.server.name
+  hostname: SITE_HOSTNAME
   restart: always
   ports:
     - "80:80"
@@ -21,16 +21,28 @@ cms:
     - "cmsstorage"
 cmsstorage:
   build: cmsstorage
+  labels:
+    io.enonic.backup.enable: "yes"
+    io.enonic.backup.data: "/cms.home"
 postgres:
   build: postgres
   restart: always
   environment:
     POSTGRES_PASSWORD: changethis_masterpostgres_pwd
     CMS_DB_PASSWORD: thisIsMy1stSecretCMSdbpwd
+  labels:
+    io.enonic.backup.enable: "yes"
+    io.enonic.backup.prescripts: "/usr/local/bin/backup-pre.sh"
+    io.enonic.backup.postscripts: "/usr/local/bin/backup-post.sh"
+    io.enonic.backup.data: "/backup"
   volumes_from:
     - postgresstorage
 postgresstorage:
-  image: postgres
+  image: postgres:9.4.1
   command: "Postgres storage container"
   volumes:
     - /var/lib/postgresql/data
+mail:
+  image: enoniccloud/postfix
+  hostname: SITE_HOSTNAME
+  restart: always
