@@ -11,4 +11,4 @@ PG_FILE=$(ls /backup/*.psql | tail -n 1)
 
 echo "Restoring database"
 export PGPASSWORD=$POSTGRES_ENV_CMS_DB_PASSWORD
-pg_restore -h postgres -U cms -d cms -O $PG_FILE
+pg_restore -h localhost -U cms -d cms -O $PG_FILE
