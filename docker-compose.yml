@@ -14,7 +14,7 @@ cms:
   links:
    - postgres
   environment:
-    CATALINA_OPTS: "-XX:MaxPermSize=256m -Xms1024m -Xmx1024m"
+    CATALINA_OPTS: "-XX:MaxPermSize=256m -Xms2048m -Xmx2048m"
     CMS_DB_PASSWORD: thisIsMy1stSecretCMSdbpwd
     CMS_DB_USER: cms
   volumes_from:
