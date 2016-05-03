@@ -14,6 +14,7 @@ cms:
     - "8080:8080"
   links:
    - postgres
+   - mail
   environment:
     CATALINA_OPTS: "-XX:MaxPermSize=256m -Xms2048m -Xmx2048m"
     CMS_DB_PASSWORD: thisIsMy1stSecretCMSdbpwd
