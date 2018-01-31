@@ -14,7 +14,8 @@ cd <your Enonic CMS installation name>
 - Now launch the container set with `docker-compose up -d`
 
 ## Restore Enonic CMS backup
-- Prepare a new installation as described above, but do not start the container set with `docker-compose up -d`
+- Prepare a new installation as described above, but **do not start** the container set with `docker-compose up -d`
+- Instead do `docker-compose up -d --no-deps postgres cmsstorage`
 - Use the `docker cp` command to copy $CMS_HOME/data and $CMS_HOME/index to `/cms.home/` in the cmsstorage container
 - Also copy the postgresql dump to `/backup` in  the postgres container and run `/usr/local/bin/backup-restore.sh`
 - Now its time to make a apache vhost for you site(s). Use the example file "apache2/sites/vhost.example.conf.example" and create apache2 vhost config named "servername.com.conf". Make shure it has ".conf" at the end, or it will not be loaded by apache. If you need to load extra module og customize the apache2 container, feel free to do that in the file "apache2/Dockerfile".
