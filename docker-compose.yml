@@ -44,6 +44,7 @@ postgresstorage:
   command: "Postgres storage container"
   volumes:
     - /var/lib/postgresql/data
+    - /backup
 mail:
   image: enoniccloud/postfix
   hostname: SITE_HOSTNAME
