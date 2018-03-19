@@ -19,24 +19,35 @@ cd <your Enonic CMS installation name>
 ```
 docker-compose up -d --no-deps cmsstorage
 ```
-- Use the `docker cp` command to copy $CMS_HOME/data and $CMS_HOME/index to `/cms.home/` in the cmsstorage container.
-```
-docker cp <cms.psql> <PROJECT>_postgres_1:/backup
+We create a temporary cms container to upload the content.
 
-docker exec <PROJECT_postgres_1 /usr/local/bin/backup-restore.sh
 ```
-- Then start the postgres service
+docker run -it --rm -volumes-from <project>_cmsstorage_1 -u root <project>_cms bash
+```
+
+Use `docker cp` command to copy $CMS_HOME/data and $CMS_HOME/index to `/cms.home/` in the cms container. 
+
+```
+docker cp $CMS_HOME/data <PROJECT>_cms_1:/cms.home/
+docker cp $CMS_HOME/index <PROJECT>_cms_1:/cms.home/
+```
+
+Then start the postgres service
 ```
 docker-compose up -d postgres
 ```
-- Also copy the postgresql dump to `/backup` in  the postgres container and run `/usr/local/bin/backup-restore.sh`
+Now copy the postgresql dump to `/backup` in  the postgres container and run `/usr/local/bin/backup-restore.sh`
 ```
 docker cp <cms.psql> <PROJECT>_postgres_1:/backup
 
 docker exec <PROJECT_postgres_1 /usr/local/bin/backup-restore.sh
 ```
-- Now its time to make a apache vhost for you site(s). Use the example file "apache2/sites/vhost.example.conf.example" and create apache2 vhost config named "servername.com.conf". Make sure it has ".conf" at the end, or it will not be loaded by apache. If you need to load extra module og customize the apache2 container, feel free to do that in the file "apache2/Dockerfile".
-- Start up the rest of the containers with the command `docker-compose up -d --no-recreate`
+Now its time to make a apache vhost for you site(s). Use the example file "apache2/sites/vhost.example.conf.example" and create apache2 vhost config named "servername.com.conf". Make sure it has ".conf" at the end, or it will not be loaded by apache. If you need to load extra module og customize the apache2 container, feel free to do that in the file "apache2/Dockerfile".
+
+Start up the rest of the containers with the command
+```
+docker-compose up -d --no-recreate
+```
 
 ## Backup Enonic CMS installation
 - Run `/usr/local/bin/backup-pre.sh` in the running postgres container to export postgres database to the folder /backup folder
